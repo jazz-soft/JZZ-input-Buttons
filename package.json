@@ -1,0 +1,30 @@
+{
+  "name": "jzz-input-buttons",
+  "version": "0.0.0",
+  "description": "MIDI Buttons",
+  "main": "javascript/JZZ.input.Buttons.js",
+  "scripts": {
+    "lint": "eslint javascript"
+  },
+  "keywords": [
+    "midi",
+    "buttons"
+  ],
+  "author": "jazz-soft (https://jazz-soft.net/)",
+  "dependencies": {
+    "jzz": "^1.0.9"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "grunt": "^1.3.0",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-uglify": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jazz-soft/JZZ-input-Buttons.git"
+  },
+  "homepage": "https://jazz-soft.net",
+  "bugs": "https://jazz-soft.org",
+  "license": "MIT"
+}

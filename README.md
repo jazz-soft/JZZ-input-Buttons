@@ -1,2 +1,2 @@
-# JZZ-input-Square
+# JZZ-input-Buttons
 coming soon...
