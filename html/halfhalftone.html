@@ -13,7 +13,9 @@
 <script>
 var content = document.getElementById('content');
 content.innerHTML = 'Please run `<tt>npm install</tt>` !';
-JZZ();
+var out = JZZ().openMidiOut();
+var butt = JZZ.input.Buttons();
+butt.connect(out);
 content.innerHTML = '';
 </script>
 
