@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Semitone Halves</title>
+<script src="../node_modules/jzz/javascript/JZZ.js"></script>
+<script src="../node_modules/jzz-synth-tiny/javascript/JZZ.synth.Tiny.js"></script>
+<script src="../node_modules/jzz-gui-select/javascript/JZZ.gui.Select.js"></script>
+<script src="../javascript/JZZ.input.Buttons.js"></script>
+</head>
+
+<body>
+<h1>Semitone Halves</h1>
+<div id=content>Please enable JavaScript!</div>
+<p><a href=index.html>back</a></p>
+<script>
+var content = document.getElementById('content');
+content.innerHTML = 'Please run `<tt>npm install</tt>` !';
+JZZ.synth.Tiny.register('Web Audio');
+content.innerHTML = '<div><label for=midioutsel>MIDI Out: </label><select id=midioutsel></select></div>';
+var midiout = JZZ.gui.SelectMidiOut({ at: 'midioutsel' });
+midiout.select();
+var butt = JZZ.input.Buttons();
+butt.connect(midiout);
+</script>
+
+</body>
+</html>
