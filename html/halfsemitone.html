@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Half Semitone</title>
+<script src="../node_modules/jzz/javascript/JZZ.js"></script>
+<script src="../node_modules/jzz-synth-tiny/javascript/JZZ.synth.Tiny.js"></script>
+<script src="../node_modules/jzz-gui-select/javascript/JZZ.gui.Select.js"></script>
+<script src="../javascript/JZZ.input.Buttons.js"></script>
+</head>
+
+<body>
+<h1>Half Semitone</h1>
+<div id=content>Please enable JavaScript!</div>
+<p><a href=index.html>back</a></p>
+<script>
+var content = document.getElementById('content');
+content.innerHTML = 'Please run `<tt>npm install</tt>` !';
+JZZ.synth.Tiny.register('Web Audio');
+content.innerHTML = '<p><label for=midioutsel>MIDI Out: </label><select id=midioutsel></select></p>';
+var midiout = JZZ.gui.SelectMidiOut({ at: 'midioutsel' });
+midiout.select();
+var butt = JZZ.input.Buttons();
+butt.connect(midiout);
+
+var sin60plus1 = Math.sqrt(3) / 2 + 1;
+var svgNS = 'http://www.w3.org/2000/svg';
+
+var svg = document.createElementNS(svgNS, 'svg');
+svg.setAttribute('style', 'width:100%; max-width:1000px;');
+svg.setAttribute('viewBox', '.4 .4 13.2 ' + (sin60plus1 + 0.2));
+content.appendChild(svg);
+var styles = {
+  w: [{ fill: '#fff' }],
+  b: [{ fill: '#222' }],
+  g: [{ fill: '#ddd' }]
+};
+function addButton(x, y, c, s) {
+  var grp = document.createElementNS(svgNS, 'g');
+  grp.setAttribute('fill', styles[c][0].fill);
+  svg.appendChild(grp);
+
+  var crcl = document.createElementNS(svgNS, 'circle');
+  crcl.setAttribute('cx', x);
+  crcl.setAttribute('cy', y);
+  crcl.setAttribute('r', .5);
+  crcl.setAttribute('stroke', '#000');
+  crcl.setAttribute('stroke-width', 1/100);
+  grp.appendChild(crcl);
+
+  var newText = document.createElementNS(svgNS, 'text');
+  newText.setAttribute('x', x);
+  newText.setAttribute('y', y);
+  newText.setAttribute('font-size', .25);
+  newText.setAttribute('fill', { w: '#000', b: '#fff', g: '#000' }[c]);
+  newText.setAttribute('text-anchor', 'middle');
+  newText.setAttribute('dominant-baseline', 'middle');
+  var textNode = document.createTextNode(s);
+  newText.appendChild(textNode);
+  grp.appendChild(newText);
+
+  return grp;
+}
+
+addButton(1, 1, 'w', 'Q');
+addButton(2, 1, 'b', 'W');
+addButton(3, 1, 'w', 'E');
+addButton(4, 1, 'b', 'R');
+addButton(5, 1, 'w', 'T');
+addButton(6, 1, 'w', 'Y');
+addButton(7, 1, 'b', 'U');
+addButton(8, 1, 'w', 'I');
+addButton(9, 1, 'b', 'O');
+addButton(10, 1, 'w', 'P');
+addButton(11, 1, 'b', '[');
+addButton(12, 1, 'w', ']');
+addButton(13, 1, 'w', '\\');
+
+addButton(1.5, sin60plus1, 'g', 'A');
+addButton(2.5, sin60plus1, 'g', 'S');
+addButton(3.5, sin60plus1, 'g', 'D');
+addButton(4.5, sin60plus1, 'g', 'F');
+addButton(5.5, sin60plus1, 'g', 'G');
+addButton(6.5, sin60plus1, 'g', 'H');
+addButton(7.5, sin60plus1, 'g', 'J');
+addButton(8.5, sin60plus1, 'g', 'K');
+addButton(9.5, sin60plus1, 'g', 'L');
+addButton(10.5, sin60plus1, 'g', ';');
+addButton(11.5, sin60plus1, 'g', '\'');
+addButton(12.5, sin60plus1, 'g', '↵');
+
+</script>
+
+</body>
+</html>
