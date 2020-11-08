@@ -19,8 +19,6 @@ JZZ.synth.Tiny.register('Web Audio');
 content.innerHTML = '<p><label for=midioutsel>MIDI Out: </label><select id=midioutsel></select></p>';
 var midiout = JZZ.gui.SelectMidiOut({ at: 'midioutsel' });
 midiout.select();
-var butt = JZZ.input.Buttons();
-butt.connect(midiout);
 
 var sin60plus1 = Math.sqrt(3) / 2 + 1;
 var svgNS = 'http://www.w3.org/2000/svg';
@@ -30,14 +28,16 @@ svg.setAttribute('style', 'width:100%; max-width:1000px;');
 svg.setAttribute('viewBox', '.4 .4 13.2 ' + (sin60plus1 + 0.2));
 content.appendChild(svg);
 var styles = {
-  w: [{ fill: '#fff' }],
-  b: [{ fill: '#222' }],
-  g: [{ fill: '#ddd' }]
+  w: [{ fill: '#fff' }, { fill: '#888' }],
+  b: [{ fill: '#222' }, { fill: '#888' }],
+  g: [{ fill: '#ddd' }, { fill: '#888' }]
 };
-function addButton(x, y, c, s) {
+var allButtons = [];
+function addButton(x, r, c, s, m) {
   var grp = document.createElementNS(svgNS, 'g');
   grp.setAttribute('fill', styles[c][0].fill);
   svg.appendChild(grp);
+  var y = [1, sin60plus1][r];
 
   var crcl = document.createElementNS(svgNS, 'circle');
   crcl.setAttribute('cx', x);
@@ -58,35 +58,38 @@ function addButton(x, y, c, s) {
   newText.appendChild(textNode);
   grp.appendChild(newText);
 
-  return grp;
+  allButtons.push({ dom: grp, midi: [[c, m]], style: styles[c] });
 }
 
-addButton(1, 1, 'w', 'Q');
-addButton(2, 1, 'b', 'W');
-addButton(3, 1, 'w', 'E');
-addButton(4, 1, 'b', 'R');
-addButton(5, 1, 'w', 'T');
-addButton(6, 1, 'w', 'Y');
-addButton(7, 1, 'b', 'U');
-addButton(8, 1, 'w', 'I');
-addButton(9, 1, 'b', 'O');
-addButton(10, 1, 'w', 'P');
-addButton(11, 1, 'b', '[');
-addButton(12, 1, 'w', ']');
-addButton(13, 1, 'w', '\\');
+addButton(1, 0, 'w', 'Q', 60);
+addButton(2, 0, 'b', 'W', 61);
+addButton(3, 0, 'w', 'E', 62);
+addButton(4, 0, 'b', 'R', 63);
+addButton(5, 0, 'w', 'T', 64);
+addButton(6, 0, 'w', 'Y', 65);
+addButton(7, 0, 'b', 'U', 66);
+addButton(8, 0, 'w', 'I', 67);
+addButton(9, 0, 'b', 'O', 68);
+addButton(10, 0, 'w', 'P', 69);
+addButton(11, 0, 'b', '[', 70);
+addButton(12, 0, 'w', ']', 71);
+addButton(13, 0, 'w', '\\', 72);
 
-addButton(1.5, sin60plus1, 'g', 'A');
-addButton(2.5, sin60plus1, 'g', 'S');
-addButton(3.5, sin60plus1, 'g', 'D');
-addButton(4.5, sin60plus1, 'g', 'F');
-addButton(5.5, sin60plus1, 'g', 'G');
-addButton(6.5, sin60plus1, 'g', 'H');
-addButton(7.5, sin60plus1, 'g', 'J');
-addButton(8.5, sin60plus1, 'g', 'K');
-addButton(9.5, sin60plus1, 'g', 'L');
-addButton(10.5, sin60plus1, 'g', ';');
-addButton(11.5, sin60plus1, 'g', '\'');
-addButton(12.5, sin60plus1, 'g', '↵');
+addButton(1.5, 1, 'g', 'A', 60);
+addButton(2.5, 1, 'g', 'S', 61);
+addButton(3.5, 1, 'g', 'D', 62);
+addButton(4.5, 1, 'g', 'F', 63);
+addButton(5.5, 1, 'g', 'G', 64);
+addButton(6.5, 1, 'g', 'H', 65);
+addButton(7.5, 1, 'g', 'J', 66);
+addButton(8.5, 1, 'g', 'K', 67);
+addButton(9.5, 1, 'g', 'L', 68);
+addButton(10.5, 1, 'g', ';', 69);
+addButton(11.5, 1, 'g', '\'', 70);
+addButton(12.5, 1, 'g', '↵', 71);
+
+var butt = JZZ.input.Buttons({ buttons: allButtons });
+butt.connect(midiout);
 
 </script>
 
