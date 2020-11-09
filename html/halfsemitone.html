@@ -58,7 +58,7 @@ function addButton(x, r, c, s, m) {
   newText.appendChild(textNode);
   grp.appendChild(newText);
 
-  allButtons.push({ dom: grp, midi: [[c, m]], style: styles[c] });
+  allButtons.push({ dom: grp, midi: [[r, m]], style: styles[c] });
 }
 
 addButton(1, 0, 'w', 'Q', 60);
@@ -90,6 +90,10 @@ addButton(12.5, 1, 'g', '↵', 71);
 
 var butt = JZZ.input.Buttons({ buttons: allButtons });
 butt.connect(midiout);
+midiout.onSelect = function(name) {
+  this.send(0xb0, 0x65, 0x00).send(0xb0, 0x64, 0x01).send(0xb0, 0x06, 0x40).send(0xb0, 0x26, 0x00);
+  this.send(0xb1, 0x65, 0x00).send(0xb1, 0x64, 0x01).send(0xb1, 0x06, 0x60).send(0xb1, 0x26, 0x00);
+};
 
 </script>
 
