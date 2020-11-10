@@ -5,6 +5,7 @@
 <script src="../node_modules/jzz/javascript/JZZ.js"></script>
 <script src="../node_modules/jzz-synth-tiny/javascript/JZZ.synth.Tiny.js"></script>
 <script src="../node_modules/jzz-gui-select/javascript/JZZ.gui.Select.js"></script>
+<script src="../node_modules/jzz-midi-gm/javascript/JZZ.midi.GM.js"></script>
 <script src="../javascript/JZZ.input.Buttons.js"></script>
 </head>
 
@@ -16,9 +17,16 @@
 var content = document.getElementById('content');
 content.innerHTML = 'Please run `<tt>npm install</tt>` !';
 JZZ.synth.Tiny.register('Web Audio');
-content.innerHTML = '<p><label for=midioutsel>MIDI Out: </label><select id=midioutsel></select></p>';
+content.innerHTML = '<p><label for=midioutsel>MIDI Out: </label><select id=midioutsel></select> &nbsp; <label for=programsel>Program: </label><select id=programsel></select></p>';
+
 var midiout = JZZ.gui.SelectMidiOut({ at: 'midioutsel' });
-midiout.select();
+var currentprog = 0;
+var programsel = document.getElementById('programsel');
+for (i = 0; i < 128; i++) programsel[i] = new Option(JZZ.MIDI.programName(i), i);
+programsel.addEventListener('change', function() {
+  currentprog = programsel.options[programsel.selectedIndex].value;
+  midiout.program(0, currentprog).program(1, currentprog);
+});
 
 var sin60plus1 = Math.sqrt(3) / 2 + 1;
 var svgNS = 'http://www.w3.org/2000/svg';
@@ -91,9 +99,11 @@ addButton(12.5, 1, 'g', '↵', 71);
 var butt = JZZ.input.Buttons({ buttons: allButtons });
 butt.connect(midiout);
 midiout.onSelect = function(name) {
+  this.program(0, currentprog).program(1, currentprog);
   this.send(0xb0, 0x65, 0x00).send(0xb0, 0x64, 0x01).send(0xb0, 0x06, 0x40).send(0xb0, 0x26, 0x00);
   this.send(0xb1, 0x65, 0x00).send(0xb1, 0x64, 0x01).send(0xb1, 0x06, 0x60).send(0xb1, 0x26, 0x00);
 };
+midiout.select();
 
 </script>
 

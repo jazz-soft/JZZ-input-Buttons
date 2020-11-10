@@ -20,6 +20,7 @@
     "grunt-contrib-jshint": "^3.0.0",
     "grunt-contrib-uglify": "^5.0.0",
     "jzz-gui-select": "^1.0.2",
+    "jzz-midi-gm": "^1.1.8",
     "jzz-synth-tiny": "^1.2.0"
   },
   "repository": {
