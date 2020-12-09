@@ -101,20 +101,28 @@
 
   Buttons.prototype.press = function(b) {
     var i;
-    if (!b.plaing) {
-      b.plaing = true;
+    if (!b.on) {
+      b.on = 1;
       for (i = 0; i < b.midi.length; i++) {
         this.emit(JZZ.MIDI.noteOn(b.midi[i][0], b.midi[i][1]));
       }
     }
+    else b.on++;
   };
 
   Buttons.prototype.release = function(b) {
+    var self = this;
+    setTimeout(function() { self.off(b); }, 0);
+  }
+
+  Buttons.prototype.off = function(b) {
     var i;
-    if (b.plaing) {
-      b.plaing = false;
-      for (i = 0; i < b.midi.length; i++) {
-        this.emit(JZZ.MIDI.noteOff(b.midi[i][0], b.midi[i][1]));
+    if (b.on) {
+      b.on--;
+      if (!b.on) {
+        for (i = 0; i < b.midi.length; i++) {
+          this.emit(JZZ.MIDI.noteOff(b.midi[i][0], b.midi[i][1]));
+        }
       }
     }
   }
