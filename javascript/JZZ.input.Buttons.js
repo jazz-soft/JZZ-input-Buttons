@@ -34,7 +34,7 @@
         bbb.mouseDown = true;
         bbb.press(b);
       }
-      //_firefoxBug = e.buttons;
+      _firefoxBug = e.buttons;
     };
   }
 
@@ -43,7 +43,7 @@
       if (bbb.mouseDown) {
         bbb.press(b);
       }
-      //_firefoxBug = e.buttons;
+      _firefoxBug = e.buttons;
     };
   }
 
@@ -52,7 +52,7 @@
       if (bbb.mouseDown) {
         bbb.release(b);
       }
-      //_firefoxBug = e.buttons;
+      _firefoxBug = e.buttons;
     };
   }
 
@@ -61,7 +61,7 @@
       e = _fixBtnUp(e);
       if (_lftBtnUp(e)) {
         bbb.release(b);
-        //piano.mouseDown = false;
+        bbb.mouseDown = false;
       }
     };
   }
@@ -73,22 +73,68 @@
     };
   }
 
+  function _watchMouseButtons() {
+    return function(e) {
+      _firefoxBug = e.buttons;
+    };
+  }
+
+  function _add(a, x) {
+    for (var i = 0; i < a.length; i++) if (a[i] == x) return;
+    a.push(x);
+  }
+
+  function _in(a, x) {
+    for (var i = 0; i < a.length; i++) if (a[i] == x) return true;
+    return false;
+  }
+
+  function _handleTouch(bbb) {
+    return function(e) {
+      e.preventDefault();
+      var t = [];
+      for (var i = 0; i < e.touches.length; i++) bbb.findButton(e.touches[i].clientX, e.touches[i].clientY, t);
+      var tt = [];
+      var i;
+      for (i = 0; i < t.length; i++) {
+        _add(tt, t[i]);
+        if (!_in(bbb.touches, t[i])) bbb.press(t[i]);
+      }
+      for (i = 0; i < bbb.touches.length; i++) {
+        if (!_in(t, bbb.touches[i])) bbb.release(bbb.touches[i]);
+      }
+      bbb.touches = tt;
+    };
+  }
+
   function Buttons(arg) {
     var a, b, d, i;
     this.moudeDown = false;
-    //this.watchButtons = _watchMouseButtons();
-    //window.addEventListener("mousedown", this.watchButtons);
-    //window.addEventListener("mousemove", this.watchButtons);
+    // this.playing = {};
+    this.buttons = [];
+    this.touches = [];
+
+    this.watchButtons = _watchMouseButtons();
+    this.touchHandle = _handleTouch(this);
+    window.addEventListener('mousedown', this.watchButtons);
+    window.addEventListener('mousemove', this.watchButtons);
     window.addEventListener('mouseup', _handleMouseOff(this));
+
     for (i = 0; i < arg.buttons.length; i++) {
       a = arg.buttons[i];
       d = a.dom;
       if (typeof d == 'string') d = document.getElementById(d);
       b = { dom: d, midi: a.midi };
+      this.buttons.push(b);
+
       d.addEventListener('mousedown', _handleMouseDown(this, b));
       d.addEventListener('mouseover', _handleMouseOver(this, b));
       d.addEventListener('mouseout', _handleMouseOut(this, b));
       d.addEventListener('mouseup', _handleMouseUp(this, b));
+
+      d.addEventListener('touchstart', this.touchHandle);
+      d.addEventListener('touchmove', this.touchHandle);
+      d.addEventListener('touchend', this.touchHandle);
 
       d.style.userSelect = 'none';
       d.style.MozUserSelect = 'none';
@@ -126,6 +172,17 @@
       }
     }
   }
+
+  Buttons.prototype.findButton = function(x, y, ret) {
+    for (var i = 0; i < this.buttons.length; i++) {
+      for (var elm = document.elementFromPoint(x, y); elm; elm = elm.parentNode) {
+        if (this.buttons[i].dom == elm) {
+          _add(ret, this.buttons[i]);
+          return;
+        }
+      }
+    }
+  };
 
   function ButtEngine() {}
 
